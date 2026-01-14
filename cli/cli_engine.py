@@ -16,6 +16,7 @@ def start_prompt():
 
 def execute_statement(s: str):
     print(f"DB statement before tokenizing: {s}")
-    t = tokenize.tokenizer(s)
-    parser.parse(t)
+    tokens = tokenize.tokenizer(s)
+    
+    parser.parse(tokens)
 
