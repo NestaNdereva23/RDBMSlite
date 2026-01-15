@@ -22,16 +22,28 @@ class Executor:
 
         return f"Table {table_name} created successfully"
     
-    def insert_into_command(self, table_name, row_data):
+    def insert_into_row(self, table_name, row_data):
         print(f"Inserting into table...: {table_name} data: {row_data}")
 
-            
-        is_valid, error = self.schema_manager.validate_row_data(table_name, row_data)
-        if not is_valid:
-            return f"Data does not conform to table {table_name} schema + {error}"
+        #read table
+        table =  self.storage.read_table(table_name)
+        print(f"Table data: {table}")
 
-        #insert the data
-        self.storage.insert_into_table(table_name, row_data)
+        is_valid, error = self.schema_manager.validate_row_data(table, row_data)
+        if not is_valid:
+            return f"Data does not conform to table {table} schema + {error}"
+
+        #insert the row
+        row_index = len(table["rows"])
+        table["rows"].append(row_data)
+
+        #update indexes
+
+
+        # save to -- storage
+        
+        self.storage.write_table(table_name, table)
+        
 
         return f"Data inserted into table {table_name} successfully"
 

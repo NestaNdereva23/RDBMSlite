@@ -76,13 +76,10 @@ def parseInsert(tokens: list):
     valuesPart = valuesPart[1:-1]  # Remove parentheses
     values = [val.strip() for val in valuesPart.split(',')]
 
-    print(f"table_name: {table_name} columns: {columnNames} values: {values}")
-
     row_data = {} # hold col_names and values
     for i in range(len(columnNames)):
         row_data[columnNames[i]] = values[i]
 
-    print(f"row_data: {row_data}")
 
     executor = Executor()
-    return executor.insert_into_command(table_name, row_data)
+    return executor.insert_into_row(table_name, row_data)
