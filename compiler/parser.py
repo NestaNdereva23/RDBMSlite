@@ -13,6 +13,9 @@ def parse(tokens: list):
 
     if command == "CREATE":
         return parseCreate(tokens)
+    
+    if command == "INSERT":
+        return parseInsert(tokens)
 
     else:
         print("Unknown command")
@@ -52,8 +55,34 @@ def parseCreate(tokens: list):
         columns.append(columnType)
         columns.append(constraints)
 
+    print(f"columns: {columns} and len: {len(columns)}")
     executor = Executor()
     return executor.create_table_command(table_name, columns)
 
+def parseInsert(tokens: list):
+    '''INSERT INTO table_name (column1, column2, column3, ...)
+    VALUES (value1, value2, value3, ...);
 
+    supported syntax >> INSERT INTO users (id, email) VALUES (1, 'user@example.com');
+    '''
+    table_name = tokens[2]
 
+    # Extract column names
+    columnsPart = " ".join(tokens).split('(')[1].split(')')[0]
+    columnNames = [col.strip() for col in columnsPart.split(',')]
+
+    # Extract values
+    valuesPart = " ".join(tokens).lower().split('values')[1].strip()
+    valuesPart = valuesPart[1:-1]  # Remove parentheses
+    values = [val.strip() for val in valuesPart.split(',')]
+
+    print(f"table_name: {table_name} columns: {columnNames} values: {values}")
+
+    row_data = {} # hold col_names and values
+    for i in range(len(columnNames)):
+        row_data[columnNames[i]] = values[i]
+
+    print(f"row_data: {row_data}")
+
+    executor = Executor()
+    return executor.insert_into_command(table_name, row_data)
