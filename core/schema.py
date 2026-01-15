@@ -23,7 +23,7 @@ class SchemaManager:
             }
 
             #Constraints flags
-            if "PRIMARY KEY" in constraints:
+            if "primary_key" in constraints:
                 col_definition["primary_key"] = True
                 col_definition["unique"] = True
                 col_definition["nullable"] = False
@@ -34,7 +34,7 @@ class SchemaManager:
                     "map": {}
                 }
 
-            if "UNIQUE" in constraints and "PRIMARY KEY" not in constraints:
+            if "unique" in constraints and "primary_key" not in constraints:
                 col_definition["unique"] = True
 
                 #create index for unique constraint

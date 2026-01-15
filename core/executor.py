@@ -38,10 +38,9 @@ class Executor:
         table["rows"].append(row_data)
 
         #update indexes
-
-
+        self._update_indexes(table, row_data, row_index)
+        print(f"update indexes done...")
         # save to -- storage
-        
         self.storage.write_table(table_name, table)
         
 
@@ -49,5 +48,10 @@ class Executor:
 
 
 
-
+    def _update_indexes(self, table, row_data, row_index):
+        print(table["indexes"])
+        for column_name in table["indexes"]:
+            if column_name in row_data:
+                value = row_data[column_name]
+                table["indexes"][column_name]["map"][value] = row_index
 
