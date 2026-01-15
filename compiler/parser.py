@@ -16,6 +16,9 @@ def parse(tokens: list):
     
     if command == "INSERT":
         return parseInsert(tokens)
+    
+    if command == "SELECT":
+        return parseSelect(tokens)
 
     else:
         print("Unknown command")
@@ -42,8 +45,6 @@ def parseCreate(tokens: list):
     print(f" columnsParts: {columnsPart}")
     columnDefinitions = [col.strip() for col in columnsPart.split(',')]
 
-    print(table_name)
-    print(columnDefinitions)
     columns = []
     for definition in columnDefinitions:
         parts = definition.split(' ')
@@ -83,3 +84,19 @@ def parseInsert(tokens: list):
 
     executor = Executor()
     return executor.insert_into_row(table_name, row_data)
+
+
+def parseSelect(tokens: list):
+    '''SELECT * FROM table_name [WHERE condition];
+
+    supported syntax >> SELECT * FROM users WHERE id = 1;
+    column values not supported yet
+    
+    '''
+
+    table_name = tokens[3].strip(";")
+    columns = tokens[1] # * to select all columns
+
+    executor = Executor()
+
+    return executor.select_from_table(table_name, columns)

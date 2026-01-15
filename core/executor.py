@@ -1,6 +1,7 @@
 import json
 from core.storage import Storage
 from core.schema import SchemaManager
+from tabulate import tabulate
 
 class Executor:
     def __init__(self):
@@ -46,12 +47,16 @@ class Executor:
 
         return f"Data inserted into table {table_name} successfully"
 
-
-
+    def select_from_table(self, table_name, columns):
+        table = self.storage.read_table(table_name)
+        
+        if columns == '*':
+            print(tabulate(table["rows"], headers="keys", tablefmt="grid"))
+            return table["rows"]
+    
     def _update_indexes(self, table, row_data, row_index):
         print(table["indexes"])
         for column_name in table["indexes"]:
             if column_name in row_data:
                 value = row_data[column_name]
                 table["indexes"][column_name]["map"][value] = row_index
-
